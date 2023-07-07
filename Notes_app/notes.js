@@ -15,9 +15,9 @@ function addNotes(title, body) {
       body,
     });
     saveNotes(notes);
-    console.log("New Note added!");
+    console.log(chalk.green("New Note added!"));
   } else {
-    console.log("Note title taken");
+    console.log(chalk.red("Note title taken"));
   }
 }
 function removeNote(title) {
