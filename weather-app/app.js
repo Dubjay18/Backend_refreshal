@@ -22,10 +22,16 @@ request({ url, json: true }, (error, response) => {
   );
 });
 
-// const searchUrl = `https://geocode.maps.co/search?q=los+Angeles`;
-// request(
-//   { url: searchUrl, json: true },
-//   (error, response) => {
-//     console.log(response.body[0].lat, response.body[0].lon);
-//   }
-// );
+const searchUrl = `https://geocode.maps.co/search?q=los+Angeles`;
+request(
+  { url: searchUrl, json: true },
+  (error, response) => {
+    if (error) {
+      console.log(
+        "Unable to connect to location services!"
+      );
+    }
+
+    console.log(response.body[0].lat, response.body[0].lon);
+  }
+);
