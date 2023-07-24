@@ -8,23 +8,46 @@ mongoose
   .then(() => console.log("Database connected!"))
   .catch((err) => console.log(err));
 console.log("Connected correctly");
-const User = mongoose.model("User", {
-  name: {
+// const User = mongoose.model("User", {
+//   name: {
+//     type: String,
+//   },
+//   age: {
+//     type: Number,
+//   },
+// });
+
+// const me = new User({
+//   name: "Andrew",
+//   age: 27,
+// });
+
+// me.save()
+//   .then(() => {
+//     console.log(me);
+//   })
+//   .catch((error) => {
+//     console.log("Error!", error);
+//   });
+
+const Task = mongoose.model("Task", {
+  description: {
     type: String,
   },
-  age: {
-    type: Number,
+  completed: {
+    type: Boolean,
   },
 });
 
-const me = new User({
-  name: "Andrew",
-  age: 27,
+const task = new Task({
+  description: "Learn the Mongoose library",
+  completed: false,
 });
 
-me.save()
+task
+  .save()
   .then(() => {
-    console.log(me);
+    console.log(task);
   })
   .catch((error) => {
     console.log("Error!", error);
