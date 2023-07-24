@@ -18,6 +18,30 @@ app.post("/users", (req, res) => {
       res.status(400).send(e);
     });
 });
+app.get("/users", (req, res) => {
+  User.find({})
+    .then((users) => {
+      res.status(200).send(users);
+    })
+    .catch((e) => {
+      res.status(500).send(e);
+    });
+});
+
+app.get("/users/:id", (req, res) => {
+  const _id = req.params.id;
+  User.findById(_id)
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: "User not found" });
+      }
+      res.status(200).send(user);
+    })
+    .catch((e) => {
+      res.status(500).send(e);
+    });
+});
+
 app.post("/tasks", (req, res) => {
   const task = new Task(req.body);
   task
