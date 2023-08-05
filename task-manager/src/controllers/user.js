@@ -27,7 +27,8 @@ class UserController {
       req.body.email,
       req.body.password
     );
-    res.send(user);
+    const token = await User.generateAuthToken();
+    res.send({ user, token });
   }
   getUsers() {
     User.find({})
