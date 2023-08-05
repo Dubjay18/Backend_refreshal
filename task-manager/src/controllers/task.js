@@ -41,7 +41,7 @@ class TaskController {
         res.status(500).send(e);
       });
   }
-  @tryCatchDecorator()
+
   static async updateTask() {
     const updates = Object.keys(req.body);
     const allowedUpdates = ["description", "completed"];
@@ -53,36 +53,47 @@ class TaskController {
         .status(400)
         .send({ error: "Invalid updates!" });
     }
-    const task = await Task.findById(req.params.id);
-    updates.forEach((update) => {
-      task[update] = req.body[update];
-    });
-    await task.save();
-    // const task = await Task.findByIdAndUpdate(
-    //   req.params.id,
-    //   req.body,
-    //   {
-    //     new: true,
-    //     runValidators: true,
-    //   }
-    // );
-    if (!task) {
-      return res
-        .status(404)
-        .send({ message: "Task not found" });
+
+    try {
+      const task = await Task.findById(req.params.id);
+      updates.forEach((update) => {
+        task[update] = req.body[update];
+      });
+      await task.save();
+      // const task = await Task.findByIdAndUpdate(
+      //   req.params.id,
+      //   req.body,
+      //   {
+      //     new: true,
+      //     runValidators: true,
+      //   }
+      // );
+      if (!task) {
+        return res
+          .status(404)
+          .send({ message: "Task not found" });
+      }
+      return res.status(200).send(task);
+    } catch (error) {
+      return res.status(400).send(error);
     }
-    return res.status(200).send(task);
   }
   @tryCatchDecorator(500)
   static async deleteTask() {
-    const task = await Task.findByIdAndDelete(
-      req.params.id
-    );
-    if (!task) {
-      return res
-        .status(404)
-        .send({ message: "Task not found" });
+    try {
+      const task = await Task.findByIdAndDelete(
+        req.params.id
+      );
+      if (!task) {
+        return res
+          .status(404)
+          .send({ message: "Task not found" });
+      }
+      return res.status(200).send(task);
+    } catch (error) {
+      return res.status(500).send(error);
     }
-    return res.status(200).send(task);
   }
 }
+
+module.exports = TaskController;

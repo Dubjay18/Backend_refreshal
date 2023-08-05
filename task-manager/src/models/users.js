@@ -42,6 +42,12 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
+  tokens: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
 });
 
 userSchema.methods.generateAuthToken = async function () {
@@ -50,6 +56,8 @@ userSchema.methods.generateAuthToken = async function () {
     { _id: user._id.toString() },
     "supersecret"
   );
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
   return token;
 };
 

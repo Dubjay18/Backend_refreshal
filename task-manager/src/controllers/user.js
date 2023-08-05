@@ -9,6 +9,7 @@ class UserController {
     this.res = res;
     this.next = next;
   }
+
   async createUser() {
     const user = new User(req.body);
 
@@ -21,14 +22,20 @@ class UserController {
         res.status(400).send(e);
       });
   }
-  @tryCatchDecorator()
+
   async login() {
-    const user = await User.findByCredentials(
-      req.body.email,
-      req.body.password
-    );
-    const token = await User.generateAuthToken();
-    res.send({ user, token });
+    try {
+      const user = await User.findByCredentials(
+        req.body.email,
+        req.body.password
+      );
+      const token = await User.generateAuthToken();
+      return res.send({ user, token });
+    } catch (error) {
+      return res
+        .status(400)
+        .send({ message: error?.message });
+    }
   }
   getUsers() {
     User.find({})
@@ -54,7 +61,7 @@ class UserController {
         res.status(500).send(e);
       });
   }
-  @tryCatchDecorator()
+
   async updateUser() {
     const updates = Object.keys(req.body);
     const allowedUpdates = ["name", "email"];
@@ -66,36 +73,43 @@ class UserController {
         .status(400)
         .send({ error: "Invalid updates!" });
     }
-
-    const user = await User.findById(req.params.id);
-    updates.forEach((update) => {
-      user[update] = req.body[update];
-    });
-    await user.save();
-    // const user = await User.findByIdAndUpdate(
-    //   req.params.id,
-    //   req.body,
-    //   {
-    //     new: true,
-    //     runValidators: true,
-    //   }
-    // );
-    if (!user) {
-      return res.status(404).send();
+    try {
+      const user = await User.findById(req.params.id);
+      updates.forEach((update) => {
+        user[update] = req.body[update];
+      });
+      await user.save();
+      // const user = await User.findByIdAndUpdate(
+      //   req.params.id,
+      //   req.body,
+      //   {
+      //     new: true,
+      //     runValidators: true,
+      //   }
+      // );
+      if (!user) {
+        return res.status(404).send();
+      }
+      return res.send(user);
+    } catch (error) {
+      return res.status(400).send(e);
     }
-    res.send(user);
   }
-  @tryCatchDecorator(500)
+
   async deleteUser() {
-    const user = await User.findByIdAndDelete(
-      req.params.id
-    );
-    if (!user) {
-      return res
-        .status(404)
-        .send({ message: "User not found" });
+    try {
+      const user = await User.findByIdAndDelete(
+        req.params.id
+      );
+      if (!user) {
+        return res
+          .status(404)
+          .send({ message: "User not found" });
+      }
+      return res.status(200).send(user);
+    } catch (error) {
+      return res.status(500).send(error);
     }
-    return res.status(200).send(user);
   }
 }
 module.exports = UserController;
