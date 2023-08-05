@@ -21,6 +21,14 @@ class UserController {
         res.status(400).send(e);
       });
   }
+  @tryCatchDecorator()
+  async login() {
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+    res.send(user);
+  }
   getUsers() {
     User.find({})
       .then((users) => {
