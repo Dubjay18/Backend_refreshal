@@ -78,7 +78,7 @@ class TaskController {
       return res.status(400).send(error);
     }
   }
-  @tryCatchDecorator(500)
+
   static async deleteTask() {
     try {
       const task = await Task.findByIdAndDelete(
