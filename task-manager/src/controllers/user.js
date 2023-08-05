@@ -11,6 +11,7 @@ class UserController {
   }
   async createUser() {
     const user = new User(req.body);
+
     user
       .save()
       .then(() => {
@@ -57,14 +58,19 @@ class UserController {
         .send({ error: "Invalid updates!" });
     }
 
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const user = await User.findById(req.params.id);
+    updates.forEach((update) => {
+      user[update] = req.body[update];
+    });
+    await user.save();
+    // const user = await User.findByIdAndUpdate(
+    //   req.params.id,
+    //   req.body,
+    //   {
+    //     new: true,
+    //     runValidators: true,
+    //   }
+    // );
     if (!user) {
       return res.status(404).send();
     }
@@ -83,3 +89,4 @@ class UserController {
     return res.status(200).send(user);
   }
 }
+module.exports = UserController;
