@@ -12,15 +12,13 @@ class UserController {
 
   async createUser() {
     const user = new User(req.body);
-
-    user
-      .save()
-      .then(() => {
-        res.status(201).send(user);
-      })
-      .catch((e) => {
-        res.status(400).send(e);
-      });
+    try {
+      await user.save();
+      const token = await User.generateAuthToken();
+      res.status(201).send({ user, token });
+    } catch (e) {
+      res.status(400).send(e);
+    }
   }
 
   async login() {
