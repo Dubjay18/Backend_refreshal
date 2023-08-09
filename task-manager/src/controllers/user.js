@@ -74,7 +74,12 @@ class UserController {
 
   async updateUser() {
     const updates = Object.keys(req.body);
-    const allowedUpdates = ["name", "email"];
+    const allowedUpdates = [
+      "name",
+      "email",
+      "password",
+      "age",
+    ];
     const isValidOperation = updates.every((update) =>
       allowedUpdates.includes(update)
     );
@@ -84,16 +89,12 @@ class UserController {
         .send({ error: "Invalid updates!" });
     }
     try {
-      const user = await User.findById(req.params.id);
       updates.forEach((update) => {
-        user[update] = req.body[update];
+        req.user[update] = req.body[update];
       });
-      await user.save();
+      await this.req.user.save();
 
-      if (!user) {
-        return res.status(404).send();
-      }
-      return res.send(user);
+      return res.send(req.user);
     } catch (error) {
       return res.status(400).send(e);
     }

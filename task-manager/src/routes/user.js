@@ -19,7 +19,7 @@ router.post("/users/logout", auth, (...args) =>
 router.post("/users/logout-all", auth, (...args) =>
   new UserController(...args).logoutAll()
 );
-router.patch("/users/:id", (...args) =>
+router.patch("/users/me", auth, (...args) =>
   new UserController(...args).updateUser()
 );
 router.delete("/users/me", auth, (...args) =>
