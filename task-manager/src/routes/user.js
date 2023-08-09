@@ -13,7 +13,12 @@ router.post("/users/login", (...args) =>
 router.get("/users/me", auth, (...args) =>
   new UserController(...args).getCurrentUser()
 );
-
+router.post("/users/logout", auth, (...args) =>
+  new UserController(...args).logout()
+);
+router.post("/users/logout-all", auth, (...args) =>
+  new UserController(...args).logoutAll()
+);
 router.get("/users/:id", (...args) =>
   new UserController(...args).getUserById()
 );

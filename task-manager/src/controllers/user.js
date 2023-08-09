@@ -35,6 +35,26 @@ class UserController {
         .send({ message: error?.message });
     }
   }
+  async logout() {
+    try {
+      req.user.tokens = req.user.tokens.filter((token) => {
+        return token.token !== req.token;
+      });
+      await req.user.save();
+      res.status(200);
+    } catch (error) {
+      res.status(500).send();
+    }
+  }
+  async logoutAll() {
+    try {
+      req.user.tokens = [];
+      await req.user.save();
+      res.status(200);
+    } catch (error) {
+      res.status(500).send();
+    }
+  }
   getUsers() {
     User.find({})
       .then((users) => {
