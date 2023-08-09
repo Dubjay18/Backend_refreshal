@@ -6,16 +6,17 @@ class TaskController {
     this.res = res;
     this.next = next;
   }
-  static createTask() {
-    const task = new Task(req.body);
-    task
-      .save()
-      .then(() => {
-        res.status(201).send(task);
-      })
-      .catch((e) => {
-        res.status(400).send(e);
-      });
+  async createTask() {
+    const task = new Task({
+      ...req.body,
+      owner: req.user,
+    });
+    try {
+      await task.save();
+      res.status(201).send(task);
+    } catch (error) {
+      res.status(400).send(error);
+    }
   }
   static getTasks() {
     Task.find({})
