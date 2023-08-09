@@ -44,6 +44,13 @@ class UserController {
         res.status(500).send(e);
       });
   }
+  async getCurrentUser() {
+    try {
+      res.send(req.user);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
   getUserById() {
     const _id = req.params.id;
     User.findById(_id)
