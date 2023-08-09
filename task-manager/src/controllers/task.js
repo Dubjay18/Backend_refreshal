@@ -9,7 +9,7 @@ class TaskController {
   async createTask() {
     const task = new Task({
       ...req.body,
-      owner: req.user,
+      owner: req.user._id,
     });
     try {
       await task.save();
@@ -18,29 +18,30 @@ class TaskController {
       res.status(400).send(error);
     }
   }
-  static getTasks() {
-    Task.find({})
-      .then((tasks) => {
-        res.status(200).send(tasks);
-      })
-      .catch((e) => {
-        res.status(500).send(e);
+  async getTasks() {
+    try {
+      const tasks = await Task.find({
+        owner: req.user._id,
       });
+      res.status(200).send(tasks);
+    } catch (error) {
+      res.status(500).send(error);
+    }
   }
-  static getTaskById() {
+  async getTaskById() {
     const _id = req.params.id;
-    Task.findById(_id)
-      .then((task) => {
-        if (!task) {
-          res
-            .status(404)
-            .send({ message: "Task not found" });
-        }
-        res.status(200).send(task);
-      })
-      .catch((e) => {
-        res.status(500).send(e);
+    try {
+      const task = await Task.findOne({
+        _id,
+        owner: req.user._id,
       });
+      if (!task) {
+        res.status(404).send({ message: "Task not found" });
+      }
+      res.status(200).send(task);
+    } catch (error) {
+      res.status(500).send(e);
+    }
   }
 
   static async updateTask() {
@@ -56,35 +57,32 @@ class TaskController {
     }
 
     try {
-      const task = await Task.findById(req.params.id);
-      updates.forEach((update) => {
-        task[update] = req.body[update];
+      const task = await Task.findOne({
+        _id: req.params.id,
+        owner: req.user._id,
       });
-      await task.save();
-      // const task = await Task.findByIdAndUpdate(
-      //   req.params.id,
-      //   req.body,
-      //   {
-      //     new: true,
-      //     runValidators: true,
-      //   }
-      // );
+
       if (!task) {
         return res
           .status(404)
           .send({ message: "Task not found" });
       }
+      updates.forEach((update) => {
+        task[update] = req.body[update];
+      });
+      await task.save();
       return res.status(200).send(task);
     } catch (error) {
       return res.status(400).send(error);
     }
   }
 
-  static async deleteTask() {
+  async deleteTask() {
     try {
-      const task = await Task.findByIdAndDelete(
-        req.params.id
-      );
+      const task = await Task.findOneAndDelete({
+        _id: req.params.id,
+        owner: req.user._id,
+      });
       if (!task) {
         return res
           .status(404)

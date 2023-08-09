@@ -6,16 +6,16 @@ const router = new express.Router();
 router.post("/tasks", auth, (...args) =>
   new TaskController(...args).createTask()
 );
-router.get("/tasks", (...args) =>
+router.get("/tasks", auth, (...args) =>
   new TaskController(...args).getTasks()
 );
-router.get("/tasks/:id", (...args) =>
+router.get("/tasks/:id", auth, (...args) =>
   new TaskController(...args).getTaskById()
 );
-router.patch("/tasks/:id", (...args) =>
+router.patch("/tasks/:id", auth, (...args) =>
   new TaskController(...args).updateTask()
 );
-router.delete("/tasks/:id", (...args) =>
+router.delete("/tasks/:id", auth, (...args) =>
   new TaskController(...args).deleteTask()
 );
 
