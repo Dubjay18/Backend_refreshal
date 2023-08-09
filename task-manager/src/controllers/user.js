@@ -71,21 +71,6 @@ class UserController {
       res.status(400).send(error);
     }
   }
-  getUserById() {
-    const _id = req.params.id;
-    User.findById(_id)
-      .then((user) => {
-        if (!user) {
-          res
-            .status(404)
-            .send({ message: "User not found" });
-        }
-        res.status(200).send(user);
-      })
-      .catch((e) => {
-        res.status(500).send(e);
-      });
-  }
 
   async updateUser() {
     const updates = Object.keys(req.body);

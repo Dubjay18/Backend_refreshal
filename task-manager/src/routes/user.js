@@ -19,14 +19,12 @@ router.post("/users/logout", auth, (...args) =>
 router.post("/users/logout-all", auth, (...args) =>
   new UserController(...args).logoutAll()
 );
-router.get("/users/:id", (...args) =>
-  new UserController(...args).getUserById()
-);
+
 router.patch("/users/:id", (...args) =>
   new UserController(...args).updateUser()
 );
 
-router.delete("/users/:id", (...args) =>
+router.delete("/users/:id", auth, (...args) =>
   new UserController(...args).deleteUser()
 );
 
