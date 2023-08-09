@@ -101,15 +101,8 @@ class UserController {
 
   async deleteUser() {
     try {
-      const user = await User.findByIdAndDelete(
-        req.user._id
-      );
-      if (!user) {
-        return res
-          .status(404)
-          .send({ message: "User not found" });
-      }
-      return res.status(200).send(user);
+      await req.user.remove();
+      return res.status(200).send(req.user);
     } catch (error) {
       return res.status(500).send(error);
     }
