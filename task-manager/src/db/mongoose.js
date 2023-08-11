@@ -10,31 +10,3 @@ mongoose
   .then(() => console.log("Database connected!"))
   .catch((err) => console.log(err));
 console.log("Connected correctly");
-
-// const me = new User({
-//   name: "Mike",
-//   email: "Myemail@Head.to",
-//   password: "qwertyuiop",
-// });
-
-// me.save()
-//   .then(() => {
-//     console.log(me);
-//   })
-//   .catch((error) => {
-//     console.log("Error!", error);
-//   });
-
-// const task = new Task({
-//   description: "Learn the Mongoose library",
-//   completed: false,
-// });
-
-// task
-//   .save()
-//   .then(() => {
-//     console.log(task);
-//   })
-//   .catch((error) => {
-//     console.log("Error!", error);
-//   });
