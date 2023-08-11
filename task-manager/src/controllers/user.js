@@ -11,69 +11,72 @@ class UserController {
   }
 
   async createUser() {
-    const user = new User(req.body);
+    const user = new User(this.req.body);
+
     try {
       await user.save();
-      const token = await User.generateAuthToken();
-      res.status(201).send({ user, token });
+      const token = await user.generateAuthToken();
+      return this.res.status(201).send({ user, token });
     } catch (e) {
-      res.status(400).send(e);
+      return this.res.status(400).send(e);
     }
   }
 
   async login() {
     try {
       const user = await User.findByCredentials(
-        req.body.email,
-        req.body.password
+        this.req.body.email,
+        this.req.body.password
       );
       const token = await User.generateAuthToken();
-      return res.send({ user, token });
+      return this.res.send({ user, token });
     } catch (error) {
-      return res
+      return this.res
         .status(400)
         .send({ message: error?.message });
     }
   }
   async logout() {
     try {
-      req.user.tokens = req.user.tokens.filter((token) => {
-        return token.token !== req.token;
-      });
-      await req.user.save();
-      res.status(200);
+      this.req.user.tokens = this.req.user.tokens.filter(
+        (token) => {
+          return token.token !== this.req.token;
+        }
+      );
+      await this.req.user.save();
+      this.res.status(200);
     } catch (error) {
-      res.status(500).send();
+      this.res.status(500).send();
     }
   }
   async logoutAll() {
     try {
-      req.user.tokens = [];
-      await req.user.save();
-      res.status(200);
+      this.req.user.tokens = [];
+      await this.req.user.save();
+      this.res.status(200);
     } catch (error) {
-      res.status(500).send();
+      this.res.status(500).send();
     }
   }
   getUsers() {
     User.find({})
       .then((users) => {
-        res.status(200).send(users);
+        this.res.status(200).send(users);
       })
       .catch((e) => {
-        res.status(500).send(e);
+        this.res.status(500).send(e);
       });
   }
   async getCurrentUser() {
     try {
-      res.send(req.user);
+      this.res.send(this.req.user);
     } catch (error) {
-      res.status(400).send(error);
+      this.res.status(400).send(error);
     }
   }
 
   async updateUser() {
-    const updates = Object.keys(req.body);
+    const updates = Object.keys(this.req.body);
     const allowedUpdates = [
       "name",
       "email",
@@ -84,28 +87,28 @@ class UserController {
       allowedUpdates.includes(update)
     );
     if (!isValidOperation) {
-      return res
+      return this.res
         .status(400)
         .send({ error: "Invalid updates!" });
     }
     try {
       updates.forEach((update) => {
-        req.user[update] = req.body[update];
+        this.req.user[update] = this.req.body[update];
       });
-      await this.req.user.save();
+      await this.this.req.user.save();
 
-      return res.send(req.user);
+      return this.res.send(this.req.user);
     } catch (error) {
-      return res.status(400).send(e);
+      return this.res.status(400).send(e);
     }
   }
 
   async deleteUser() {
     try {
-      await req.user.remove();
-      return res.status(200).send(req.user);
+      await this.req.user.remove();
+      return this.res.status(200).send(this.req.user);
     } catch (error) {
-      return res.status(500).send(error);
+      return this.res.status(500).send(error);
     }
   }
 }
