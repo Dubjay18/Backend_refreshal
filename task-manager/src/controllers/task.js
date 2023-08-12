@@ -19,11 +19,21 @@ class TaskController {
     }
   }
   async getTasks() {
+    const match = {};
+    if (this.req.query.completed) {
+      match.completed = req.query.completed === "true";
+    }
+    this.req.query.completed;
     try {
-      const tasks = await Task.find({
-        owner: this.req.user._id,
-      });
-      res.status(200).send(tasks);
+      await this.req.user
+        .populate({
+          path: "tasks",
+          match: {
+            completed: false,
+          },
+        })
+        .execPopulate();
+      res.status(200).send(this.req.user.tasks);
     } catch (error) {
       res.status(500).send(error);
     }
