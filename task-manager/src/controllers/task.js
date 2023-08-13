@@ -28,8 +28,10 @@ class TaskController {
       await this.req.user
         .populate({
           path: "tasks",
-          match: {
-            completed: false,
+          match,
+          options: {
+            limit: parseInt(req.query.limit),
+            skip: parseInt(req.query.skip),
           },
         })
         .execPopulate();
