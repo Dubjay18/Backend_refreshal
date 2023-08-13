@@ -111,5 +111,8 @@ class UserController {
       return this.res.status(500).send(error);
     }
   }
+  async uploadAvatar() {
+    this.res.send();
+  }
 }
 module.exports = UserController;
