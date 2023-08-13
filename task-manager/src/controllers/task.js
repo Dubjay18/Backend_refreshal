@@ -20,10 +20,14 @@ class TaskController {
   }
   async getTasks() {
     const match = {};
+    const sort = {};
     if (this.req.query.completed) {
-      match.completed = req.query.completed === "true";
+      match.completed = this.req.query.completed === "true";
     }
-    this.req.query.completed;
+    if (this.req.query.sortBy) {
+      const parts = this.req.query.sortBy.split(":");
+      sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
+    }
     try {
       await this.req.user
         .populate({
@@ -32,6 +36,7 @@ class TaskController {
           options: {
             limit: parseInt(req.query.limit),
             skip: parseInt(req.query.skip),
+            sort,
           },
         })
         .execPopulate();
