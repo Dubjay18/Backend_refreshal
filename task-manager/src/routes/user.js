@@ -6,6 +6,15 @@ const multer = require("multer");
 const router = Router();
 const upload = multer({
   dest: "avatars",
+  limits: {
+    fileSize: 100000,
+  },
+  fileFilter(req, file, cb) {
+    if (file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      cb(new Error("Please upload a word documnets."));
+    }
+    cb(undefined, true);
+  },
 });
 router.post("/users", (...args) =>
   new UserController(...args).createUser()
@@ -28,7 +37,7 @@ router.patch("/users/me", auth, (...args) =>
 router.delete("/users/me", auth, (...args) =>
   new UserController(...args).deleteUser()
 );
-router.delete(
+router.post(
   "/users/me/avatar",
   upload.single("upload"),
   (...args) => new UserController(...args).uploadAvatar()
