@@ -40,7 +40,10 @@ router.delete("/users/me", auth, (...args) =>
 router.post(
   "/users/me/avatar",
   upload.single("upload"),
-  (...args) => new UserController(...args).uploadAvatar()
+  (...args) => new UserController(...args).uploadAvatar(),
+  (error, res, ...args) => {
+    res.status(400).send({ error: error.message });
+  }
 );
 
 module.exports = router;
