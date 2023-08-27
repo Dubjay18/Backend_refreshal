@@ -1,3 +1,5 @@
+import JLogger from "../../utils/logger";
+
 /**
  * secureServerListen function starts the server and listens on the specified port
  * @param PORT - the port number or string to listen on
@@ -15,21 +17,22 @@ export const secureServerListen = (
   const connect = () => {
     server
       .listen(PORT, (): void => {
-        console.log(
-          "Hi, Server is up on port " + PORT + "😎"
-        );
+        JLogger(`Server is up on port ${PORT}😎`);
       })
       .on("error", (err: any) => {
         console.error(err);
         if (retries < MAX_RETRIES) {
           retries++;
-          console.log(
-            `Retrying connection in ${RETRY_TIMEOUT}ms...`
+          JLogger(
+            `Retrying connection in ${RETRY_TIMEOUT}ms...`,
+            "Warning"
           );
+
           setTimeout(connect, RETRY_TIMEOUT);
         } else {
-          console.error(
-            `Maximum retries (${MAX_RETRIES}) exceeded. Giving up peace out✌️.`
+          JLogger(
+            `Maximum retries (${MAX_RETRIES}) exceeded. Giving up peace out✌️.`,
+            "Error"
           );
         }
       });
