@@ -8,7 +8,7 @@ import { PORT } from "./config/constants";
 import { app } from "./app";
 import { secureServerListen } from "./config/server";
 import { Server } from "socket.io";
-import { JLogger } from "./utils/logger";
+import JLogger from "./utils/logger";
 
 /**
  * The http server instance.
