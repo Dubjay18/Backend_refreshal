@@ -6,7 +6,9 @@ import socketio from "socket.io";
 import { JLogger } from "./utils/logger";
 
 const server: http.Server = http.createServer(app);
-const io: socketio.Server = new socketio.Server(server);
+import { Server } from "socket.io";
+const io: Server = new Server(server);
+
 io.on("connection", () => {
   JLogger("New WebSocket connection");
 });
