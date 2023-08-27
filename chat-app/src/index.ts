@@ -1,7 +1,14 @@
-import express, { Application } from "express";
+import http from "http";
+import { PORT } from "./config/constants";
+import { app } from "./app";
+import { secureServerListen } from "./config/server";
+import socketio from "socket.io";
+import { JLogger } from "./utils/logger";
 
-const app: Application = express();
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, (): void => {
-  console.log("Server is up on port " + PORT);
+const server: http.Server = http.createServer(app);
+const io: socketio.Server = new socketio.Server(server);
+io.on("connection", () => {
+  JLogger("New WebSocket connection");
 });
+
+secureServerListen(PORT, server);
