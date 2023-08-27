@@ -1,34 +1,16 @@
 <!-- FILEPATH: c:\Users\LENOVO\Desktop\projects\Backend_refreshal\chat-app\public\index.html -->
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
+<html>
+  <head> </head>
   <body>
-    <h1>Chat app</h1>
+    Chat App
+
+    <form id="message-form">
+      <input name="message" placeholder="Message" />
+      <button>Send</button>
+    </form>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="./ts/chat.js"></script>
-    <!-- <script>
-      const socket = io();
-
-      socket.on("connect", () => {
-        console.log("Connected to the server");
-      });
-
-      socket.on("custom-event", (data) => {
-        console.log("Received custom event:", data);
-      });
-
-      // Emit events from the client to the server
-      socket.emit("client-event", {
-        message: "Hello from client!",
-      });
-
-      // You can now use the socket object to emit and receive events
-    </script> -->
   </body>
 </html>

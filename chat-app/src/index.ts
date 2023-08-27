@@ -9,8 +9,12 @@ const server: http.Server = http.createServer(app);
 import { Server } from "socket.io";
 const io: Server = new Server(server);
 
-io.on("connection", () => {
-  JLogger("New WebSocket connection");
+io.on("connection", (socket) => {
+  JLogger("New Web socket connection");
+  socket.emit("message", "Welcome!");
+  socket.on("sendMessage", (text) => {
+    JLogger(`message ${text}`);
+  });
 });
 
 secureServerListen(PORT, server);
