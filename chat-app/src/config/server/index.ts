@@ -17,7 +17,7 @@ export const secureServerListen = (
   const connect = () => {
     server
       .listen(PORT, (): void => {
-        JLogger(`Server is up on port ${PORT}`);
+        JLogger(`Server is up on port ${PORT}😎`);
       })
       .on("error", (err: any) => {
         console.error(err);
