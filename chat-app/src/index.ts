@@ -44,8 +44,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendLocation", (location) => {
-    io.emit('message', `location${location}`)
-    JLogger(`location ${location}`);
+    io.emit(
+      "message",
+      `location ${location.lat}, ${location.long}`
+    );
+    JLogger(`location ${location.lat}, ${location.long}`);
   });
   /**
    * Listens for a "disconnect" event from the client and emits a message to all clients.
