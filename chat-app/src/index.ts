@@ -44,7 +44,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendLocation", (location) => {
-    io.emit('message', `location ${location}`)
+    io.emit('message', `location${location}`)
     JLogger(`location ${location}`);
   });
   /**
