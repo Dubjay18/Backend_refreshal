@@ -11,7 +11,9 @@ document
 
     const message = e.target.elements.message.value;
 
-    socket.emit("sendMessage", message);
+    socket.emit("sendMessage", message, () => {
+      console.log("Message delivered");
+    });
   });
 
 document

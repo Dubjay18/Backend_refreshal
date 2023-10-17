@@ -38,8 +38,9 @@ io.on("connection", (socket) => {
    * Also logs the message using the JLogger utility.
    * @param text - The message text.
    */
-  socket.on("sendMessage", (text: string) => {
+  socket.on("sendMessage", (text: string, callback) => {
     io.emit("message", text);
+    callback();
     JLogger(`message ${text}`);
   });
 
